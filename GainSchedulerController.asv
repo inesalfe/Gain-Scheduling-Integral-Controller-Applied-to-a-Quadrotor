@@ -33,7 +33,7 @@ Q_error = diag( [ 1 ; 1 ; 1 ; 1 ] );
 
 Q = blkdiag( Q_state, Q_error );
  
-R = diag( [ 0.1 ; 0.1 ; 0.1 ; 0.1 ] );
+R = diag( [ 0.001 ; 0.001 ; 0.001 ; 0.001 ] );
 
 %% Experiment - Lemniscate curve with tangencial yawn and varying altitude
 
@@ -103,8 +103,6 @@ while t_next < t_max - t_step
     [ t_sim, state_sim ] = ode45( @(t_sim, state_sim) odeFun_quadrotor_gainScheduler( t_sim, state_sim ), t_span, state_initial, options );
 
     %%% Define initial conditions for next epoch  
-
-    u_out = [ u_out ; (-K(:, 1:12) * ( state_sim(:,1:12)' - transpose( C ) * [eval(traj_x(t_sim))'; eval(traj_y(t_sim))'; eval(traj_z(t_sim))' ; eval(traj_phi(t_sim))'] ) + state_sim(:,13:16)' + u_ss*ones(1,size(t_sim,1)))' ] ;
     
     t_next     = t_sim(end);
     state_next = transpose( state_sim(end, :) );
@@ -113,7 +111,11 @@ while t_next < t_max - t_step
 
     t_sim_acc     = [ t_sim_acc     ; t_sim     ];
     state_sim_acc = [ state_sim_acc ; state_sim ];
-
+    ref_out = zeros(size(state_sim,1),1);
+    for i = t_next:t_step : t_max;
+        ref_out
+    u_out = [ u_out ; -K(:, 1:12) * ( x - transpose( C ) * ref ) + mod_int_error + u_ss ] ;
+    
 end    
 
 t_vec = t_min : t_step : t_max;

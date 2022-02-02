@@ -60,7 +60,7 @@ traj_y(t) = subs(traj_y(t), 'x', t*w);
 traj_phi(t) = subs(traj_phi(t), 'x', t*w);
 
 t_init = 0;
-t_max = 200;
+t_max = 30;
 t_step = 0.01;
 t_vec = t_init:t_step:t_max;
 
@@ -82,4 +82,4 @@ fig3 = figure;
 plot(t_vec, phi_values);
 hold off;
 
-traject_user = [ traj_x(t); traj_y(t); traj_z(t) ; 0 ];
+traject_user = [ traj_x(t); traj_y(t); traj_z(t) ; traj_phi(t) ];
