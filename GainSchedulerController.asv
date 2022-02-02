@@ -2,11 +2,24 @@
 
 %% New System Variables %%%
 
-syms mod_int_error_x mod_int_error_y mod_int_error_z mod_int_error_psi ...
-     ref_x           ref_y           ref_z           ref_psi           ...
+syms int_error_x int_error_y int_error_z int_error_psi ...
+     ref_x       ref_y       ref_z       ref_psi       ...
+     error_x     error_y     error_z     error_psi    
 
-mod_int_error = [ mod_int_error_x ; mod_int_error_y ; mod_int_error_z ; mod_int_error_psi ];
-ref           = [ ref_x           ; ref_y           ; ref_z           ; ref_psi           ];
+int_error = [ int_error_x ; int_error_y ; int_error_z ; int_error_psi ];
+ref       = [ ref_x       ; ref_y       ; ref_z       ; ref_psi       ];
+
+%% Augmented x-space representation %%
+
+error = y - ref;
+
+% Augment x
+
+state_aug    = [ x    ; int_error ]; 
+
+% Augment x equation
+
+f_x_u_aug = [ f_x_u ; error ];
 
 %% Setup Gain-Scheduling Controller %%
 
@@ -44,11 +57,11 @@ syms lemniscate_x(t) lemniscate_y(t) lemniscate_z(t) lemniscate_yaw(t)
 % Define trajectory foci and frequency of the Lemniscate trajectory
 
 a = 10 / sqrt(2);  
-w = pi/50 ;       
+w = pi/40 ;       
 
 lemniscate_x(t)   = a * sqrt(2) .* sin( w * t ) ./ ( ( 1 + cos( w * t )^2 ) ); 
 lemniscate_y(t)   = a * sqrt(2) .* cos( w * t ) .* sin( w * t ) ./ ( ( 1 + cos( w * t )^2 ) );
-lemniscate_z(t)   = 5;
+lemniscate_z(t)   = 5 ;
 lemniscate_yaw(t) = ( (lemniscate_y(t) == 0) & ( lemniscate_x(t) == 0 ) & (lemniscate_x(t+0.1) > 0) ) * ...
                         ( pi / 4 )        + ...
                     ( (lemniscate_y(t) == 0) & ( lemniscate_x(t) == 0 ) & (lemniscate_x(t+0.1) < 0) ) * ...
@@ -73,10 +86,8 @@ state_next    = [ 0 ; 0 ; 5    ; zeros(3, 1)  ; ...
 t_sim_acc     = [];           
 state_sim_acc = [];           
 
-%%% Augment x-space representation
+u_ss = [ parms.mass * parms.grav  ; zeros(3, 1) ];
 
-state_aug    = [ x  ; mod_int_error ]; 
-    
 while t_next < t_max - t_step
   
     %%%%%% A. Compute gains matrices of the controller %%%%%%
@@ -89,9 +100,7 @@ while t_next < t_max - t_step
 
     x_ss = [ state_next(1:3)       ; zeros(3, 1) ; 
                      0 ; 0 ; state_next(9) ; zeros(3, 1) ];
-    %u_ss = [ 2 * parms.mass * parms.grav  ; zeros(3, 1) ];
-    u_ss = [ parms.mass * parms.grav  ; zeros(3, 1) ];
-       
+
     %%% Compute linearization matrices of the closed-loop system at new 
     %%% equilibrium point
     
@@ -104,10 +113,12 @@ while t_next < t_max - t_step
     
     %%%%%% B. Define x-space representation of the open-loop system %%%%%%
     
+    state_aug    = [ x  ; int_error ];
+        
     %%% Replace in x equation generic u with gain-scheduling controller
-
+    
     state_eq_control = [ f_x_u ; -K(:, 13:16) * ( C * x - ref ) ];
-    state_eq_control = subs( state_eq_control, u, -K(:, 1:12) * ( x - transpose( C ) * ref ) + mod_int_error );
+    state_eq_control = subs( state_eq_control, u, -K(:, 1:12) * (x-C'*ref) - int_error);
     
     %%% Replace in x equation generic reference with the trajectory
 
