@@ -83,7 +83,7 @@ odeFun_quadrotor_fixedGain = @( t_sim, state_sim ) quadrotor_fixedGain( t_sim, s
  
 % Define time span and initial state for Ode45
 
-t_min = 0; t_step = 0.01; t_max = 35;
+t_min = 0; t_step = 0.01;
 t_span = t_min : t_step : t_max;
 
 state_initial_1 = [ 7  ; 15  ; 0     ; zeros(3, 1)  ; ... 
@@ -119,8 +119,8 @@ plot( state_sim_4(:, 1), ...
       state_sim_4(:, 2), ... 
       'LineWidth', 2, 'DisplayName', 'Trajectory');  
   
-xlim([ 2  15 ]);
-ylim([ 2  15 ]);
+xlim([ 2  10 ]);
+ylim([ 5  15 ]);
 xlabel('Position X' , 'interpreter', 'latex', 'fontsize', 15)
 ylabel('Position Y' , 'interpreter', 'latex', 'fontsize', 15)
 
@@ -142,7 +142,7 @@ plot( t_sim_4, ...
       state_sim_4(:, 3), ... 
       'LineWidth', 3, 'DisplayName', 'Trajectory'); 
 
-xlim([ 0   30 ]);
+xlim([ 0   t_max ]);
 ylim([ 0   10 ]);
 xlabel('Time' ,       'interpreter', 'latex', 'fontsize', 15)
 ylabel('Position Z' , 'interpreter', 'latex', 'fontsize', 15)
@@ -165,7 +165,7 @@ plot( t_sim_4, ...
       'LineWidth', 2, 'DisplayName', 'Trajectory');  
 hold on;
    
-xlim([ 0      30 ]);
+xlim([ 0      t_max ]);
 ylim([ -pi/2 pi/2 ]);
 xlabel('Time' ,       'interpreter', 'latex', 'fontsize', 15)
 ylabel('Angle Yaw' ,  'interpreter', 'latex', 'fontsize', 15)

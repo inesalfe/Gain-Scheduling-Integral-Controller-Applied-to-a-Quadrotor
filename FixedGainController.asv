@@ -122,13 +122,13 @@ plot( t_sim, ...
       'LineWidth', 2, 'DisplayName', 'Trajectory');
 hold on;
 plot(  0:t_step:t_max, ... 
-       0*(0:t_step:t_max), ... 
+       eval(traj_z (0:t_step:t_max) ), ... 
        'LineStyle', '--', 'LineWidth', 2);
    
 xlim([ 0     t_max ]);
 ylim([ -2*pi   2*pi ]);
 xlabel('Time' ,       'interpreter', 'latex', 'fontsize', 15)
-ylabel('$\psi$' ,  'interpreter', 'latex', 'fontsize', 15)
+ylabel('Angle Yaw' ,  'interpreter', 'latex', 'fontsize', 15)
 
 %% Experiment - Lemniscate curve with tangential yaw
 
@@ -194,4 +194,4 @@ plot(  0:t_step:t_max, ...
 xlim([ 0     t_max ]);
 ylim([ -2*pi   2*pi ]);
 xlabel('Time' ,       'interpreter', 'latex', 'fontsize', 15)
-ylabel('$\psi$' ,  'interpreter', 'latex', 'fontsize', 15)
+ylabel('Angle Yaw' ,  'interpreter', 'latex', 'fontsize', 15)

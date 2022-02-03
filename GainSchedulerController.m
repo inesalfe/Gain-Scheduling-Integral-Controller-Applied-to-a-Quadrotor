@@ -14,7 +14,7 @@ global yaw_ref yaw_tol;
 
 %%% Define tolerance upon which yaw angle is switched
 
-yaw_tol = pi/10;
+yaw_tol = pi/8;
 
 %%% Define the linearization matrices of the closed-loop system
 %%% around a generic equilibrium point
@@ -39,10 +39,10 @@ R = diag( [ 0.1 ; 0.1 ; 0.1 ; 0.1 ] );
 
 %%% Define time span and initial x for Ode45
 
-t_min = 0; t_step = 0.01; t_max = 30;
+t_min = 0; t_step = 0.01;
 
 t_next        = 0;
-state_next    = [ 5 ; 10 ; 5    ; zeros(3, 1)  ; ... 
+state_next    = [ eval(traj_x(0)) ; eval(traj_y(0)) ; eval(traj_z(0)) ; zeros(3, 1) ; ... 
                   0 ; 0 ; eval(traj_phi(0)) ; zeros(7, 1) ];   
               
 t_sim_acc     = [];           
@@ -118,7 +118,7 @@ end
 
 t_vec = t_min : t_step : t_max;
 
-%%% Plot results
+%% Plot results
 tiledlayout(3, 2)
 
 nexttile([2 2])
@@ -130,8 +130,8 @@ plot(  eval(traj_x (t_vec) ), ...
        eval(traj_y (t_vec) ), ... 
        'LineStyle', '--', 'LineWidth', 2);
   
-xlim([ -5  10  ]);
-ylim([ -5  10 ]);
+xlim([ -11  11  ]);
+ylim([ -11  11 ]);
 xlabel('Position X' , 'interpreter', 'latex', 'fontsize', 15)
 ylabel('Position Y' , 'interpreter', 'latex', 'fontsize', 15)
 
@@ -157,8 +157,13 @@ hold on;
 plot(  t_vec, ... 
        eval(traj_phi (t_vec) ), ... 
        'LineStyle', '--', 'LineWidth', 2);
-   
+
+xlim([ 0     t_max ]);
+ylim([ -2*pi   2*pi ]);
+xlabel('Time' ,       'interpreter', 'latex', 'fontsize', 15)
+ylabel('$\psi$' ,  'interpreter', 'latex', 'fontsize', 15)
 hold off;
+
 fig1 = figure;
 plot(u_out);
 

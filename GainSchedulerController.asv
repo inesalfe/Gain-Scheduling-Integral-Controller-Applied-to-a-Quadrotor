@@ -14,7 +14,7 @@ global yaw_ref yaw_tol;
 
 %%% Define tolerance upon which yaw angle is switched
 
-yaw_tol = pi/10;
+yaw_tol = pi/8;
 
 %%% Define the linearization matrices of the closed-loop system
 %%% around a generic equilibrium point
@@ -33,16 +33,16 @@ Q_error = diag( [ 1 ; 1 ; 1 ; 1 ] );
 
 Q = blkdiag( Q_state, Q_error );
  
-R = diag( [ 0.001 ; 0.001 ; 0.001 ; 0.001 ] );
+R = diag( [ 0.1 ; 0.1 ; 0.1 ; 0.1 ] );
 
 %% Experiment - Lemniscate curve with tangencial yawn and varying altitude
 
 %%% Define time span and initial x for Ode45
 
-t_min = 0; t_step = 0.01; t_max = 30;
+t_min = 0; t_step = 0.01;
 
 t_next        = 0;
-state_next    = [ 5 ; 10 ; 5    ; zeros(3, 1)  ; ... 
+state_next    = [ eval(traj_x(0)) ; eval(traj_y(0)) ; eval(traj_z(0)) ; zeros(3, 1) ; ... 
                   0 ; 0 ; eval(traj_phi(0)) ; zeros(7, 1) ];   
               
 t_sim_acc     = [];           
@@ -103,6 +103,8 @@ while t_next < t_max - t_step
     [ t_sim, state_sim ] = ode45( @(t_sim, state_sim) odeFun_quadrotor_gainScheduler( t_sim, state_sim ), t_span, state_initial, options );
 
     %%% Define initial conditions for next epoch  
+
+    u_out = [ u_out ; (-K(:, 1:12) * ( state_sim(:,1:12)' - transpose( C ) * [eval(traj_x(t_sim))'; eval(traj_y(t_sim))'; eval(traj_z(t_sim))' ; eval(traj_phi(t_sim))'] ) + state_sim(:,13:16)' + u_ss*ones(1,size(t_sim,1)))' ] ;
     
     t_next     = t_sim(end);
     state_next = transpose( state_sim(end, :) );
@@ -111,16 +113,12 @@ while t_next < t_max - t_step
 
     t_sim_acc     = [ t_sim_acc     ; t_sim     ];
     state_sim_acc = [ state_sim_acc ; state_sim ];
-    ref_out = zeros(size(state_sim,1),1);
-    for i = t_next:t_step : t_max;
-        ref_out
-    u_out = [ u_out ; -K(:, 1:12) * ( x - transpose( C ) * ref ) + mod_int_error + u_ss ] ;
-    
+
 end    
 
 t_vec = t_min : t_step : t_max;
 
-%%% Plot results
+%% Plot results
 tiledlayout(3, 2)
 
 nexttile([2 2])
@@ -132,8 +130,8 @@ plot(  eval(traj_x (t_vec) ), ...
        eval(traj_y (t_vec) ), ... 
        'LineStyle', '--', 'LineWidth', 2);
   
-xlim([ -5  10  ]);
-ylim([ -5  10 ]);
+xlim([ -11  11  ]);
+ylim([ -11  11 ]);
 xlabel('Position X' , 'interpreter', 'latex', 'fontsize', 15)
 ylabel('Position Y' , 'interpreter', 'latex', 'fontsize', 15)
 
@@ -159,8 +157,13 @@ hold on;
 plot(  t_vec, ... 
        eval(traj_phi (t_vec) ), ... 
        'LineStyle', '--', 'LineWidth', 2);
-   
+
+xlim([ 0     t_max ]);
+ylim([ -2*pi   2*pi ]);
+xlabel('Time' ,       'interpreter', 'latex', 'fontsize', 15)
+ylabel('$\psi$' ,  'interpreter', 'latex', 'fontsize', 15)
 hold off;
+
 fig1 = figure;
 plot(u_out);
 
