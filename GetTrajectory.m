@@ -2,6 +2,8 @@
 
 addpath('SLMtools/');
 
+clear waypoints;
+
 fig1 = figure(1);
 hold on
 xlim([-10, 10])
@@ -25,9 +27,22 @@ close all
 
 waypoints = [way_x', way_y'];
 
+% waypoints = [
+% [5, 10];
+% [6, 7];
+% [2, 3];
+% [-1, 2];
+% [-3, -5];
+% ];
+
 fig2 = figure;
 scatter(waypoints(:,1), waypoints(:,2), 30);
 hold off;
+
+%% Save or load waypoints
+
+% save('DataFiles/waypoints_1.mat', 'waypoints')
+load('DataFiles/waypoints_2.mat', 'waypoints')
 
 %% Calculate spline
 

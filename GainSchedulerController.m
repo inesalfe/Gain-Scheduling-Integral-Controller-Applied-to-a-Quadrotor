@@ -132,8 +132,8 @@ plot(  eval(traj_x (t_vec) ), ...
   
 xlim([ -11  11  ]);
 ylim([ -11  11 ]);
-xlabel('Position X' , 'interpreter', 'latex', 'fontsize', 15)
-ylabel('Position Y' , 'interpreter', 'latex', 'fontsize', 15)
+xlabel('Position X (m)' , 'interpreter', 'latex', 'fontsize', 15)
+ylabel('Position Y (m)' , 'interpreter', 'latex', 'fontsize', 15)
 
 nexttile
 plot( t_sim_acc, ... 
@@ -146,8 +146,8 @@ plot(  t_vec, ...
 
 xlim([ 0   t_max ]);
 ylim([ 0   10     ]);
-xlabel('Time' ,       'interpreter', 'latex', 'fontsize', 15)
-ylabel('Position Z' , 'interpreter', 'latex', 'fontsize', 15)
+xlabel('Time (s)' ,       'interpreter', 'latex', 'fontsize', 15)
+ylabel('Altitude (m)' , 'interpreter', 'latex', 'fontsize', 15)
 
 nexttile
 plot( t_sim_acc, ... 
@@ -159,9 +159,9 @@ plot(  t_vec, ...
        'LineStyle', '--', 'LineWidth', 2);
 
 xlim([ 0     t_max ]);
-ylim([ -2*pi   2*pi ]);
-xlabel('Time' ,       'interpreter', 'latex', 'fontsize', 15)
-ylabel('$\psi$' ,  'interpreter', 'latex', 'fontsize', 15)
+ylim([ -pi   pi ]);
+xlabel('Time (s)' ,       'interpreter', 'latex', 'fontsize', 15)
+ylabel('$\psi$ (rad)' ,  'interpreter', 'latex', 'fontsize', 15)
 hold off;
 
 fig1 = figure;
