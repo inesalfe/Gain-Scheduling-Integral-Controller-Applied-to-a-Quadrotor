@@ -1,4 +1,4 @@
-%%%%%%%%% Part D: Gain-Scheduler Controller for the Quadrotor %%%%%%%%%
+%%%%%%%%% Part E: Gain-Scheduler Controller for the Quadrotor %%%%%%%%%
 
 %% New System Variables %%%
 
@@ -16,8 +16,7 @@ global yaw_ref yaw_tol;
 
 yaw_tol = pi/8;
 
-%%% Define the linearization matrices of the closed-loop system
-%%% around a generic equilibrium point
+%%% Define the linearization matrices of the closed-loop systemm around a generic equilibrium point
 
 A_int = [ A zeros(12,4) ; C zeros(4, 4)];
 B_int = [ B   ;   zeros(4, 4)];
@@ -35,7 +34,7 @@ Q = blkdiag( Q_state, Q_error );
  
 R = diag( [ 0.1 ; 0.1 ; 0.1 ; 0.1 ] );
 
-%% Experiment - Lemniscate curve with tangencial yawn and varying altitude
+%% Experiment - Trajectory with tangencial yawn
 
 %%% Define time span and initial x for Ode45
 
@@ -49,7 +48,7 @@ t_sim_acc     = [];
 state_sim_acc = [];
 u_out         = [];
 
-%%% Augment x-space representation
+%%% Augment space representation
 
 state_aug    = [ x  ; mod_int_error ]; 
 

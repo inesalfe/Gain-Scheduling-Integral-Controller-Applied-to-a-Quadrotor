@@ -1,4 +1,4 @@
-%%%%%%%%% Part C: Fixed-Gain Controller for the Quadrotor %%%%%%%%%
+%%%%%%%%% Part D: Fixed-Gain Controller for the Quadrotor %%%%%%%%%
 
 %% New system variables %%%
 
@@ -9,28 +9,27 @@ syms int_error_x int_error_y int_error_z int_error_psi ...
 int_error = [ int_error_x ; int_error_y ; int_error_z ; int_error_psi ];
 ref       = [ ref_x       ; ref_y       ; ref_z       ; ref_psi       ];
  
-% 1. Augmented x-space representation %%
+% Expression for the error
 
 error = y - ref;
 
-% Augment x
+% Augment state
 
 state_aug    = [ x    ; int_error ]; 
 
-% Augment x equation
+% Augment state equations
 
 f_x_u_aug = [ f_x_u ; error ];
 
-% 2. Design Fixed-Gain Controller  %%
+%%% Design Fixed-Gain Controller
 
-%%% Define the equilibrium point 
+% Define the equilibrium point 
 
 x_ss = [ eval(traj_x(0)) ; eval(traj_y(0)) ; eval(traj_z(0)) ; zeros(3, 1)  ; ... 
                  0 ; 0 ; 0 ; zeros(3, 1) ];
 u_ss = [ parms.mass * parms.grav  ; zeros(3, 1) ];
 
-%%% Determine linearization of the closed-loop system
-%%% around the equilibrium point
+% Determine linearization of the closed-loop system around the equilibrium point
 
 A_int = [ A zeros(12, 4) ; C zeros(4, 4)  ];
 B_int = [ B   ;   zeros(4, 4)  ];
@@ -38,7 +37,7 @@ B_int = [ B   ;   zeros(4, 4)  ];
 A_int_stable = eval( subs( A_int, [ x ; u ], [ x_ss ; u_ss ] ) );
 B_int_stable = eval( subs( B_int, [ x ; u ], [ x_ss ; u_ss ] ) );
 
-%%% Determine fixed-gain matrix via LQR formulation
+% Determine fixed-gain matrix via LQR formulation
 
 Q_state = diag( [ 1  ; 1  ; 1  ;     ... 
                   1  ; 1  ; 1  ;     ... 
@@ -53,14 +52,14 @@ R = diag( [ 0.1 ; 0.1 ; 0.1 ; 0.1 ] );
  
 K = lqr( A_int_stable, B_int_stable, Q , R );
 
-% 3. Experiments %%%%%%
+%%% Experiments
 
 % Replace generic u with fixed-gain controller
 
 state_eq_control = f_x_u_aug;
 state_eq_control = subs( state_eq_control, u, -K(:, 1:12) * ( x - transpose( C ) * ref ) - K(:, 13:16) * int_error + u_ss);
 
-% Experiment - Lemniscate curve with fixed yaw
+% Experiment - Trajectory with zero yaw angle
 
 syms traject_zero;
 
@@ -130,7 +129,7 @@ ylim([ -pi   pi ]);
 xlabel('Time (s)' ,       'interpreter', 'latex', 'fontsize', 15)
 ylabel('$\psi$ (rad)' ,  'interpreter', 'latex', 'fontsize', 15)
 
-%% Experiment - Lemniscate curve with tangential yaw
+%% Experiment - Trajectory with tangential yaw angle
 
 syms int_error_x int_error_y int_error_z int_error_psi ...
      ref_x       ref_y       ref_z       ref_psi       ...
@@ -139,26 +138,25 @@ syms int_error_x int_error_y int_error_z int_error_psi ...
 int_error = [ int_error_x ; int_error_y ; int_error_z ; int_error_psi ];
 ref       = [ ref_x       ; ref_y       ; ref_z       ; ref_psi       ];
  
-% 1. Augmented x-space representation %%
+% Expression for the error
 
 error = y - ref;
 
-% Augment x
+% Augment state
 
 state_aug    = [ x    ; int_error ]; 
 
-% Augment x equation
+% Augment state equations
 
 f_x_u_aug = [ f_x_u ; error ];
 
-%%% Define the equilibrium point 
+% Define the equilibrium point 
 
 x_ss = [ eval(traj_x(0)) ; eval(traj_y(0)) ; eval(traj_z(0)) ; zeros(3, 1)  ; ... 
                  0 ; 0 ; eval(traj_phi(0)) ; zeros(3, 1) ];
 u_ss = [ parms.mass * parms.grav  ; zeros(3, 1) ];
 
-%%% Determine linearization of the closed-loop system
-%%% around the equilibrium point
+% Determine linearization of the closed-loop system around the equilibrium point
 
 A_int = [ A zeros(12, 4) ; C zeros(4, 4)  ];
 B_int = [ B   ;   zeros(4, 4)  ];
@@ -166,7 +164,7 @@ B_int = [ B   ;   zeros(4, 4)  ];
 A_int_stable = eval( subs( A_int, [ x ; u ], [ x_ss ; u_ss ] ) );
 B_int_stable = eval( subs( B_int, [ x ; u ], [ x_ss ; u_ss ] ) );
 
-%%% Determine fixed-gain matrix via LQR formulation
+% Determine fixed-gain matrix via LQR formulation
 
 Q_state = diag( [ 1  ; 1  ; 1  ;     ... 
                   1  ; 1  ; 1  ;     ... 
@@ -181,7 +179,7 @@ R = diag( [ 0.1 ; 0.1 ; 0.1 ; 0.1 ] );
  
 K = lqr( A_int_stable, B_int_stable, Q , R );
 
-% 3. Experiments %%%%%%
+%%% Experiments
 
 % Replace generic u with fixed-gain controller
 
