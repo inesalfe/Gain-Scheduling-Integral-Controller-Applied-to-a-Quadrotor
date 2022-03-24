@@ -1,5 +1,5 @@
 This repository is a simulation of the control of a non-linear model of a quadrotor.
-Files should be run in the follwing order:
+Files should be run in the following order:
 
 MathematicalModel: Contains the non linear equations of the quadrator.
 
