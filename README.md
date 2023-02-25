@@ -1,3 +1,5 @@
+# Gain Scheduling Intergal Controller Applied to a Quadrotor
+
 This is the final project for the "Robotics" course. This course is a masters course in the degree of Electrical and Compuuter Engeneering in Instituto Superior Técnico - Universidade de Lisboa.
 
 The goal of this project was to develop a Matlab simulation of the control of a non-linear model of a quadrotor. This repository contains the code and the report paper.
