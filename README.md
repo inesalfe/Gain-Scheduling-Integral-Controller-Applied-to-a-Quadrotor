@@ -4,6 +4,10 @@ This is the final project for the "Robotics" course. This course is a masters co
 
 The goal of this project was to develop a Matlab simulation of the control of a non-linear model of a quadrotor. This repository contains the code and the report paper.
 
+## Abstract
+
+The control of non-linear systems presents major challenges when compared to the control of linear systems. To downsize the complexity of non-linear systems, a common practice is to linearize the system around an equilibrium point and, sub- sequently, use known linear control techniques. Problems arise if the state of the system deviates greatly from the equilibrium point around which the system is linearized. To overcome this issue, gain- scheduling control uses different gains, calculated for different equilibrium points. This approach allows for an adaptation of the control parameters depending on the state of the system. Here, we compare a fixed-gain and a gain-scheduling controller by applying them to the problem of tracking a time-varying reference where the non-linear system in consideration is a quadrotor. We experimentally show that a fixed gain controller does not allow, in general, for the quadrotor to follow a time-varying reference. However, this problem is circumvented by applying a gain-scheduling controller.
+
 ## Files and usage
 
 Files should be run in the following order:
